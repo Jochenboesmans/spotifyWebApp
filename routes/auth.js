@@ -1,12 +1,5 @@
 const passport = require('passport');
 
-const requireLogin = require('../middleware/requireLogin');
-const mongoose = require('mongoose');
-
-const UserModel = mongoose.model('user');
-
-const fetch = require('node-fetch');
-
 module.exports = (app) => {
     /* Get access to user's top artists and tracks info on Spotify servers */
     app.get('/auth/spotify',
@@ -36,13 +29,7 @@ module.exports = (app) => {
         res.send(req.user);
     });
 
-    /* Root route, gets access token tied to currently logged in user and fetches data from Spotify API */
-    app.get('/', requireLogin, async (req, res) => {
-        /* TODO: Make fetch work */
-        const accessToken = await UserModel.findById(req.user.id).select('accessToken');
-
-        res.send(fetch("https://api.spotify.com/v1/me/top/artists", {
-            headers: { Authorization: "Bearer " + accessToken }
-        }));
-    });
+    app.get('/', (req, res) => {
+        res.send("hi, this is the root page");
+    })
 };

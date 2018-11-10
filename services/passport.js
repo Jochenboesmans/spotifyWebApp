@@ -11,6 +11,7 @@ const UserModel = mongoose.model('user');
     throughout the session.
  */
 passport.serializeUser((user, done) => {
+    console.log(user);
     done(null, user.id);
 });
 
@@ -29,17 +30,11 @@ passport.use(new Strategy(
     },
     async (accessToken, refreshToken, expires_in, profile, done) =>
     {
-        const existingUser = await UserModel.findOne( { spotifyID: profile.id } );
-        if (existingUser) {
-            /* User exists in DB already */
-            done(null, existingUser);
-        } else {
-            /* No user with the given profile id exists in DB yet
-                => create new record with for user
-             */
-            const newUser = await new UserModel( { spotifyID: profile.id, accessToken: accessToken } ).save();
-            done(null, newUser);
+        if (await UserModel.findOne( { spotifyID: profile.id } )) {
+            UserModel.deleteOne( { spotifyID: profile.id } );
         }
+        const newUser = await new UserModel( { spotifyID: profile.id, accessToken: accessToken } ).save();
+        done(null, newUser);
     }
     )
 );

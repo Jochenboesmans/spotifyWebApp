@@ -41,7 +41,8 @@ require('./models/user');
 require('./services/passport'); //
 
 /* Run express routes, effectively handling all traffic to server */
-require('./routes/index')(app);
+require('./routes/auth')(app);
+require('./routes/spotifyAPI')(app);
 
 /* Handle react route requests
 if (process.env.NODE_ENV === 'production') {
