@@ -44,7 +44,7 @@ require('./services/passport'); //
 require('./routes/auth')(app);
 require('./routes/spotifyAPI')(app);
 
-/* Handle react route requests
+/* Handle react route requests */
 if (process.env.NODE_ENV === 'production') {
     // Make Express serve front-end assets in react build
     app.use(express.static('client/build'));
@@ -54,7 +54,7 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     })
-}*/
+}
 
 /* Server listening on port provided by process environment
 with default value of 5000.

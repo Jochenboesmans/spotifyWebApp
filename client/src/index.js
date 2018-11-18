@@ -1,18 +1,19 @@
-import 'materialize-css/dist/css/materialize.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk';
-import actions from "./actions";
 import * as serviceWorker from './serviceWorker';
-
 import App from './components/App';
-import reducers from './reducers';
+import { Provider } from "react-redux";
+import {applyMiddleware, createStore} from "redux";
+import reducer from "./reducers";
+import reduxThunk from "redux-thunk";
+import { BrowserRouter, Route } from "react-router-dom";
 
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+/**
+ * Initializes global store with active page of index 0 (landing page).
+ */
+const store = createStore(reducer, {}, applyMiddleware(reduxThunk));
 
-ReactDOM.render(<Provider store={store}><App someaction={someaction}/></Provider>,
+ReactDOM.render(<Provider store={store}><BrowserRouter><Route exact path="/" component={App}/></BrowserRouter></Provider>,
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

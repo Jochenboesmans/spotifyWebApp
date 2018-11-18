@@ -7,14 +7,14 @@ const mongoose = require('mongoose');
 /* Get the mongoose users collection model */
 const UserModel = mongoose.model('user');
 
-/* Make sure only the id of the user is persistent
-    throughout the session.
+/* Only the user ID is saved in the session.
  */
 passport.serializeUser((user, done) => {
-    console.log(user);
     done(null, user.id);
 });
 
+/* How to retrieve user object from ID saved in the session.
+ */
 passport.deserializeUser(async (id, done) => {
     const user = await UserModel.findById(id, (err, user) => {
         done(err, user);

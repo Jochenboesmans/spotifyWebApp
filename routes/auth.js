@@ -26,10 +26,6 @@ module.exports = (app) => {
 
     /* Basic handler for fetching current user */
     app.get('/api/current_user', (req, res) => {
-        res.send(req.user);
+        res.send(req.user.id);
     });
-
-    app.get('/', (req, res) => {
-        res.send("hi, this is the root page");
-    })
 };
