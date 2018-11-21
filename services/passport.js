@@ -1,6 +1,6 @@
 const passport = require('passport');
 const Strategy = require('passport-spotify').Strategy;
-const keys = require('../config/keys');
+const config = require('../config');
 const mongoose = require('mongoose');
 
 
@@ -10,31 +10,33 @@ const UserModel = mongoose.model('user');
 /* Only the user ID is saved in the session.
  */
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+  done(null, user.id);
 });
 
 /* How to retrieve user object from ID saved in the session.
  */
 passport.deserializeUser(async (id, done) => {
-    const user = await UserModel.findById(id, (err, user) => {
-        done(err, user);
-    });
+  const user = await UserModel.findById(id);
+  done(null, user);
 });
 
 passport.use(new Strategy(
-    {
-        clientID: keys.spotifyClientID,
-        clientSecret: keys.spotifyClientSecret,
-        callbackURL: "http://localhost:5000/auth/spotify/callback/",
-        proxy: true
-    },
-    async (accessToken, refreshToken, expires_in, profile, done) =>
-    {
-        if (await UserModel.findOne( { spotifyID: profile.id } )) {
-            UserModel.deleteOne( { spotifyID: profile.id } );
-        }
-        const newUser = await new UserModel( { spotifyID: profile.id, accessToken: accessToken } ).save();
-        done(null, newUser);
+  {
+    clientID: config.spotifyClientID,
+    clientSecret: config.spotifyClientSecret,
+    callbackURL: config.passportCallbackURL,
+    proxy: true
+  },
+  async (accessToken, refreshToken, expires_in, profile, done) => {
+    try {
+      console.log(profile.id);
+      await UserModel.findOneAndDelete({spotifyID: profile.id});
+
+      const newUser = await new UserModel({spotifyID: profile.id, accessToken: accessToken}).save();
+      done(null, newUser);
+    } catch (err) {
+      console.log(err);
     }
-    )
+  }
+  )
 );

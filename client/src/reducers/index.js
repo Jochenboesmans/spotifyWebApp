@@ -1,12 +1,8 @@
-import { combineReducers } from 'redux';
-import { authReducer } from './authReducer';
-import { navigationReducer } from './navigationReducer';
-import { topTracksReducer } from './topTracksReducer';
-import { topArtistsReducer } from "./topArtistsReducer";
+import {combineReducers} from 'redux';
+import {navigationReducer} from './navigationReducer';
+import {authReducer} from "./authReducer";
 
 export default combineReducers({
-    auth: authReducer,
-    activePage: navigationReducer,
-    topArtists: topArtistsReducer,
-    topTracks: topTracksReducer
+  auth: authReducer,
+  activePage: navigationReducer,
 });

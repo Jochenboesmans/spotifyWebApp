@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const {Schema} = mongoose;
 const mongooseEncryption = require('mongoose-encryption');
-const privateKey = require('../config/keys').mongooseEncryptionKey;
+const privateKey = require('../config').mongooseEncryptionKey;
 
 const userSchema = new Schema({
-    spotifyID: String,
-    accessToken: String
+  spotifyID: String,
+  accessToken: String
 });
 
 /* Encrypt the collection */
-userSchema.plugin(mongooseEncryption, { secret: privateKey, excludeFromEncryption: ['spotifyID'] });
+userSchema.plugin(mongooseEncryption, {secret: privateKey, excludeFromEncryption: ['spotifyID']});
 
 /* Create a mongoose model with the given Schema defined above */
 mongoose.model('user', userSchema);
